@@ -1,0 +1,6 @@
+framework module DataBind {
+  umbrella header "DataBind-umbrella.h"
+
+  export *
+  module * { export * }
+}

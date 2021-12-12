@@ -1,0 +1,22 @@
+{
+  "name": "DataBind",
+  "version": "0.1.0",
+  "summary": "A short description of DataBind.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/iyinghui@163.com/DataBind",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "iyinghui@163.com": "wangyinghui@changba.com"
+  },
+  "source": {
+    "git": "https://github.com/iyinghui@163.com/DataBind.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "DataBind/Classes/**/*"
+}
