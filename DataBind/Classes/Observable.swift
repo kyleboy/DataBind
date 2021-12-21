@@ -57,27 +57,27 @@ public class Subscriber<T> {
     
 }
 
-public struct Event<T> {
+public class Event<T> {
     public typealias HandlerType = (T) -> ()
     
     private var subscription: [Subscriber<T>] = []
     
     @discardableResult
-    public mutating func add(owner o: AnyObject?, handler h: @escaping HandlerType) -> Subscriber<T> {
+    public func add(owner o: AnyObject?, handler h: @escaping HandlerType) -> Subscriber<T> {
         let subscriber = Subscriber(owner: o, handler: h);
         add(subscriber: subscriber)
         return subscriber
     }
     
-    public mutating func add(subscriber: Subscriber<T>) {
+    public func add(subscriber: Subscriber<T>) {
         subscription.append(subscriber)
     }
     
-    public mutating func remove(subscriber: Subscriber<T>) {
+    public func remove(subscriber: Subscriber<T>) {
         subscription.removeAll { $0 === subscriber }
     }
     
-    mutating func notify(_ value: T) {
+    func notify(_ value: T) {
         subscription.removeAll { !$0.value() }
         subscription.forEach { subscriber in
             subscriber.handler(value)
@@ -85,19 +85,25 @@ public struct Event<T> {
     }
 }
 
-public struct Observable<T> {
+@propertyWrapper public struct Observable<T> {
+    
     public typealias ValueType = T
     
     public var beforeChange = Event<ValueChange<T>>()
     public var afterChange = Event<ValueChange<T>>()
     
-    public var value: ValueType {
-        willSet { beforeChange.notify(ValueChange(value, newValue))}
-        didSet { afterChange.notify(ValueChange(oldValue, value))}
+    
+    public var wrappedValue: ValueType {
+        willSet { beforeChange.notify(ValueChange(wrappedValue, newValue))}
+        didSet { afterChange.notify(ValueChange(oldValue, wrappedValue))}
     }
     
-    public init(_ v: T) {
-        value = v
+    public var projectedValue: Self {
+        return self
+    }
+    
+    public init(wrappedValue v: T) {
+        wrappedValue = v
     }
 }
 

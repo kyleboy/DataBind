@@ -24,15 +24,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+//
+//        let data = DataBind()
+//        print(data.user ?? "")
+//
+//        let data1 = DataBind()
+//        print(data1.user ?? "")
+//        print(user ?? "")
         
-        let data = DataBind()
-        print(data.user ?? "")
-        
-        let data1 = DataBind()
-        print(data1.user ?? "")
-        print(user ?? "")
-        
-        user = "newTest"
+        viewModel.$account.afterChange.add(owner: self) { value in
+            print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
+        }
+//        user = "newTest"
 //        titleLabel.addObserver(self, forKeyPath: "./.text", options: .new, context: nil)
         
     }
@@ -43,7 +46,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func accountChanged(_ sender: UITextField) {
-        viewModel.account.value = sender.text
+        viewModel.account = sender.text
     }
     
     @IBAction func presentSelf(_ sender: Any) {
@@ -54,23 +57,27 @@ class ViewController: UIViewController {
 
 
 class ViewModel: NSObject {
-    var account = Observable<String?>(nil)
+    @Observable var account: String? = "12"
     var password: String?
     
     override init() {
         super.init()
         
-        let sub1 = account.afterChange.add(owner: self) { value in
+        $account.afterChange.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
-        account.afterChange.remove(subscriber: sub1)
-        
-        let sub2 = account.afterChange.add(owner: self) { value in
+
+        let sub1 = $account.afterChange.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
-        account.afterChange.remove(subscriber: sub2)
-        
-        let sub3 = account.afterChange.add(owner: self) { value in
+        $account.afterChange.remove(subscriber: sub1)
+
+        let sub2 = $account.afterChange.add(owner: self) { value in
+            print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
+        }
+        $account.afterChange.remove(subscriber: sub2)
+
+        let sub3 = $account.afterChange.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
     }
