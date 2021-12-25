@@ -24,7 +24,7 @@ class Tests: XCTestCase {
         }
         let x = TestInt()
         var t: Int = -1
-        x.$i.afterChange.add(owner: self) { value in
+        x.$i.change.add(owner: self) { value in
             t = value.newValue
             print(t)
         }

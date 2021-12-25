@@ -22,11 +22,12 @@ extension ValueChange {
     }
 }
 
-public class Subscriber<T> {
+public class Subscription<T> {
     public typealias HandlerType = (T) -> ()
     
     private var _value: () -> Bool
     public private(set) var handler: HandlerType
+    public private(set) var owner: () -> AnyObject?
     
     public func value() -> Bool {
         if !_value() {
@@ -48,6 +49,7 @@ public class Subscriber<T> {
         } else {
             _value = { [weak o] in o != nil }
         }
+        owner = { [weak o] in o }
         handler = h
     }
     
@@ -60,26 +62,41 @@ public class Subscriber<T> {
 public class Event<T> {
     public typealias HandlerType = (T) -> ()
     
-    private var subscription: [Subscriber<T>] = []
+    private var subscriptions: [Subscription<T>] = []
     
     @discardableResult
-    public func add(owner o: AnyObject?, handler h: @escaping HandlerType) -> Subscriber<T> {
-        let subscriber = Subscriber(owner: o, handler: h);
-        add(subscriber: subscriber)
+    public func add(owner o: AnyObject?, handler h: @escaping HandlerType) -> Subscription<T> {
+        let subscriber = Subscription(owner: o, handler: h);
+        add(subscription: subscriber)
         return subscriber
     }
     
-    public func add(subscriber: Subscriber<T>) {
-        subscription.append(subscriber)
+    public func add(subscription: Subscription<T>) {
+        subscriptions.append(subscription)
     }
     
-    public func remove(subscriber: Subscriber<T>) {
-        subscription.removeAll { $0 === subscriber }
+    
+    /// 保证此owner只有一个订阅
+    /// - Parameters:
+    ///   - o: 监听者的对象
+    ///   - h: 数据改变回调
+    /// - Returns: 订阅
+    @discardableResult
+    public func one(owner o: AnyObject?, handler h: @escaping HandlerType) -> Subscription<T> {
+        subscriptions.removeAll { $0.owner() === o }
+        
+        let subscriber = Subscription(owner: o, handler: h);
+        add(subscription: subscriber)
+        return subscriber
+    }
+    
+    public func remove(subscriber: Subscription<T>) {
+        subscriptions.removeAll { $0 === subscriber }
     }
     
     func notify(_ value: T) {
-        subscription.removeAll { !$0.value() }
-        subscription.forEach { subscriber in
+        subscriptions.removeAll { !$0.value() }
+        subscriptions.forEach { subscriber in
             subscriber.handler(value)
         }
     }
@@ -89,13 +106,10 @@ public class Event<T> {
     
     public typealias ValueType = T
     
-    public var beforeChange = Event<ValueChange<T>>()
-    public var afterChange = Event<ValueChange<T>>()
-    
+    public var change = Event<ValueChange<T>>()
     
     public var wrappedValue: ValueType {
-        willSet { beforeChange.notify(ValueChange(wrappedValue, newValue))}
-        didSet { afterChange.notify(ValueChange(oldValue, wrappedValue))}
+        didSet { change.notify(ValueChange(oldValue, wrappedValue))}
     }
     
     public var projectedValue: Self {

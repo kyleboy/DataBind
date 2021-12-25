@@ -32,7 +32,7 @@ class ViewController: UIViewController {
 //        print(data1.user ?? "")
 //        print(user ?? "")
         
-        viewModel.$account.afterChange.add(owner: self) { value in
+        viewModel.$account.change.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
 //        user = "newTest"
@@ -63,21 +63,21 @@ class ViewModel: NSObject {
     override init() {
         super.init()
         
-        $account.afterChange.add(owner: self) { value in
+        $account.change.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
 
-        let sub1 = $account.afterChange.add(owner: self) { value in
+        let sub1 = $account.change.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
-        $account.afterChange.remove(subscriber: sub1)
+        $account.change.remove(subscriber: sub1)
 
-        let sub2 = $account.afterChange.add(owner: self) { value in
+        let sub2 = $account.change.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
-        $account.afterChange.remove(subscriber: sub2)
+        $account.change.remove(subscriber: sub2)
 
-        let sub3 = $account.afterChange.add(owner: self) { value in
+        let sub3 = $account.change.add(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
     }
