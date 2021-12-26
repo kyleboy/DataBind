@@ -43,7 +43,7 @@ class DataBindVSCombineVSRxSwiftTests: XCTestCase {
 //        self.measure {
 //            let x = TestInt()
 ////            var t: Int = -1
-////            x.$i.change.add(owner: self) { value in
+////            x.$i.change(owner: self) { value in
 ////                t = value.newValue
 ////                print(t)
 ////            }

@@ -26,6 +26,7 @@ public class Subscription<T> {
     public typealias HandlerType = (T) -> ()
     
     private var _value: () -> Bool
+    public private(set) var flag: String
     public private(set) var handler: HandlerType
     public private(set) var owner: () -> AnyObject?
     
@@ -43,7 +44,7 @@ public class Subscription<T> {
         handler = { _ in () }
     }
     
-    public init(owner o: AnyObject?, handler h: @escaping HandlerType) {
+    public init(owner o: AnyObject?, flag f: String = "default", handler h: @escaping HandlerType) {
         if o == nil {
             _value = { false }
         } else {
@@ -51,6 +52,7 @@ public class Subscription<T> {
         }
         owner = { [weak o] in o }
         handler = h
+        flag = f
     }
     
     deinit {
@@ -62,11 +64,11 @@ public class Subscription<T> {
 public class Event<T> {
     public typealias HandlerType = (T) -> ()
     
-    private var subscriptions: [Subscription<T>] = []
+    var subscriptions: [Subscription<T>] = []
     
     @discardableResult
-    public func add(owner o: AnyObject?, handler h: @escaping HandlerType) -> Subscription<T> {
-        let subscriber = Subscription(owner: o, handler: h);
+    public func add(owner: AnyObject?, flag: String, handler: @escaping HandlerType) -> Subscription<T> {
+        let subscriber = Subscription(owner: owner, flag: flag, handler: handler);
         add(subscription: subscriber)
         return subscriber
     }
@@ -74,24 +76,9 @@ public class Event<T> {
     public func add(subscription: Subscription<T>) {
         subscriptions.append(subscription)
     }
-    
-    
-    /// 保证此owner只有一个订阅
-    /// - Parameters:
-    ///   - o: 监听者的对象
-    ///   - h: 数据改变回调
-    /// - Returns: 订阅
-    @discardableResult
-    public func one(owner o: AnyObject?, handler h: @escaping HandlerType) -> Subscription<T> {
-        subscriptions.removeAll { $0.owner() === o }
         
-        let subscriber = Subscription(owner: o, handler: h);
-        add(subscription: subscriber)
-        return subscriber
-    }
-    
-    public func remove(subscriber: Subscription<T>) {
-        subscriptions.removeAll { $0 === subscriber }
+    public func remove(subscription: Subscription<T>) {
+        subscriptions.removeAll { $0 === subscription }
     }
     
     func notify(_ value: T) {
@@ -102,24 +89,108 @@ public class Event<T> {
     }
 }
 
-@propertyWrapper public struct Observable<T> {
+extension Event {
+    public func remove(flag: String) {
+        subscriptions.removeAll { $0.flag == flag }
+    }
+    
+    public func remove(onwer: AnyObject) {
+        subscriptions.removeAll { $0.owner() === onwer }
+    }
+}
+
+
+// MARK: - Publisher
+public protocol Publisher {
+    associatedtype ValueType
+    typealias ValueChangeType = ValueChange<ValueType>
+    
+    var event: Event<ValueChangeType> { get }
+    var value: ValueType { get set }
+    
+    init(_ v: ValueType)
+    
+    /// 添加一个监听
+    /// - Parameters:
+    ///   - owner: 监听者
+    ///   - handler: 数据变化回调
+    @discardableResult
+    func change(owner: AnyObject?, flag: String, handler: @escaping (ValueChangeType) -> ()) -> Subscription<ValueChangeType>
+    
+    func remove(subscription: Subscription<ValueChangeType>) -> Self
+}
+
+extension Publisher {
+    @discardableResult
+    public func change(owner: AnyObject?, flag: String = "default", handler: @escaping (ValueChangeType) -> ()) -> Subscription<ValueChangeType> {
+        if owner != nil {
+            handler(ValueChangeType(value, value))
+        }
+        return event.add(owner: owner, flag: flag, handler: handler)
+    }
+    
+    @discardableResult
+    public func remove(subscription: Subscription<ValueChangeType>) -> Self {
+        event.remove(subscription: subscription)
+        return self
+    }
+    
+    @discardableResult
+    public func remove(flag: String) -> Self {
+        event.remove(flag: flag)
+        return self
+    }
+    
+    @discardableResult
+    public func remove(onwer: AnyObject) -> Self {
+        event.remove(onwer: onwer)
+        return self
+    }
+}
+
+public struct Subject<T>: Publisher {
+    public typealias ValueType = T
+    public typealias ValueChangeType = ValueChange<T>
+    
+    public var event = Event<ValueChangeType>()
+    
+    public var value: ValueType {
+        didSet { event.notify(ValueChange(oldValue, value))}
+    }
+
+    public init(_ v: T) {
+        value = v
+    }
+}
+
+@propertyWrapper public struct Observable<T>: Publisher {
     
     public typealias ValueType = T
+    public typealias ValueChangeType = ValueChange<T>
     
-    public var change = Event<ValueChange<T>>()
+    public var event = Event<ValueChangeType>()
+    public var value: ValueType {
+        get { wrappedValue }
+        set { wrappedValue = newValue }
+    }
     
     public var wrappedValue: ValueType {
-        didSet { change.notify(ValueChange(oldValue, wrappedValue))}
+        didSet { event.notify(ValueChange(oldValue, wrappedValue))}
     }
     
     public var projectedValue: Self {
         return self
     }
     
-    public init(wrappedValue v: T) {
+    public init(_ v: T) {
+        wrappedValue = v
+    }
+    
+    public init(wrappedValue v: ValueType) {
         wrappedValue = v
     }
 }
+
 
 func log(_ msg: String) {
     debugPrint("Observable \(msg)")

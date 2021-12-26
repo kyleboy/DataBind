@@ -24,20 +24,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-//
-//        let data = DataBind()
-//        print(data.user ?? "")
-//
-//        let data1 = DataBind()
-//        print(data1.user ?? "")
-//        print(user ?? "")
         
-        viewModel.$account.change.add(owner: self) { value in
+        viewModel.$account.change(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
-//        user = "newTest"
-//        titleLabel.addObserver(self, forKeyPath: "./.text", options: .new, context: nil)
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,7 +40,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func presentSelf(_ sender: Any) {
-        
         self.present(Self(), animated: true, completion: nil)
     }
 }
@@ -59,30 +48,4 @@ class ViewController: UIViewController {
 class ViewModel: NSObject {
     @Observable var account: String? = "12"
     var password: String?
-    
-    override init() {
-        super.init()
-        
-        $account.change.add(owner: self) { value in
-            print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
-        }
-
-        let sub1 = $account.change.add(owner: self) { value in
-            print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
-        }
-        $account.change.remove(subscriber: sub1)
-
-        let sub2 = $account.change.add(owner: self) { value in
-            print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
-        }
-        $account.change.remove(subscriber: sub2)
-
-        let sub3 = $account.change.add(owner: self) { value in
-            print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
-        }
-    }
-    
-    deinit {
-        
-    }
 }
