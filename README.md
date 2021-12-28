@@ -5,6 +5,36 @@
 [![License](https://img.shields.io/cocoapods/l/DataBind.svg?style=flat)](https://cocoapods.org/pods/DataBind)
 [![Platform](https://img.shields.io/cocoapods/p/DataBind.svg?style=flat)](https://cocoapods.org/pods/DataBind)
 
+基于Swift propertyWrapper实现的KVO
+
+
+
+Use
+
+```swift
+func test {
+  class TestInt {
+   	@Observable var i: Int = 0
+ 	}
+	let x = TestInt()
+	x.$i.change(owner: self) { value in
+		print(t)
+	}
+	// print 0
+  
+	x.i = 1  // print 1
+	x.i += 1 // print 2
+	x.i += 1 // print 3
+	x.i += 1 // print 4
+	x.i -= 1 // print 3
+} 
+
+test() // 0 1 2 3 4 3
+
+```
+
+
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
