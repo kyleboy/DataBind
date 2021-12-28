@@ -44,7 +44,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		667D19FD2772A93D004A905C /* DataBindVSCombineVSRxSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBindVSCombineVSRxSwiftTests.swift; sourceTree = "<group>"; };
-		6EEA0B5094F678E048EA0B8B /* DataBind.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = DataBind.podspec; path = ../DataBind.podspec; sourceTree = "<group>"; };
+		6EEA0B5094F678E048EA0B8B /* DataBind.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = DataBind.podspec; path = ../DataBind.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		827A98C74F5DC16DBBA5EBF5 /* Pods-DataBind_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DataBind_Example.release.xcconfig"; path = "Target Support Files/Pods-DataBind_Example/Pods-DataBind_Example.release.xcconfig"; sourceTree = "<group>"; };
 		883A3259A98CA6C8A6CC0F0F /* Pods_DataBind_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DataBind_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8B4AB91E98A06FB540BA62B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };

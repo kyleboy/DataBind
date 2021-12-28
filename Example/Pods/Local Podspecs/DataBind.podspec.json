@@ -1,8 +1,8 @@
 {
   "name": "DataBind",
   "version": "0.1.0",
-  "summary": "A short description of DataBind.",
-  "description": "TODO: Add long description of the pod here.",
+  "summary": "基于Swift propertyWrapper实现的KVO",
+  "description": "基于Swift propertyWrapper实现的KVO",
   "homepage": "https://github.com/iyinghui@163.com/DataBind",
   "license": {
     "type": "MIT",
