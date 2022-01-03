@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/DataBind.svg?style=flat)](https://cocoapods.org/pods/DataBind)
 [![Platform](https://img.shields.io/cocoapods/p/DataBind.svg?style=flat)](https://cocoapods.org/pods/DataBind)
 
-基于Swift propertyWrapper实现的KVO
+利用Swift 属性包装器和泛型实现的观察者模式（KVO）
 
 
 
