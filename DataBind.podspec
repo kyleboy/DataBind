@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DataBind'
-  s.version          = '0.1.0'
-  s.summary          = '基于Swift propertyWrapper实现的KVO'
+  s.version          = '0.1.1'
+  s.summary          = '利用Swift 属性包装器和泛型实现的观察者模式（KVO）'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-  基于Swift propertyWrapper实现的KVO
+  利用Swift 属性包装器和泛型实现的观察者模式（KVO）
                        DESC
 
   s.homepage         = 'https://github.com/kyleboy/DataBind'

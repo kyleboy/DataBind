@@ -5,6 +5,7 @@ platform :ios, '9.0'
 target 'DataBind_Example' do
   
   pod 'DataBind', :path => '../'
+#  pod 'DataBind', '0.1.1'
 #  pod 'RxSwift'
 
   # pod 'Observable-Swift'

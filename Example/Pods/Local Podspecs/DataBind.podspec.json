@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "summary": "基于Swift propertyWrapper实现的KVO",
   "description": "基于Swift propertyWrapper实现的KVO",
-  "homepage": "https://github.com/iyinghui@163.com/DataBind",
+  "homepage": "https://github.com/kyleboy/DataBind",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "iyinghui@163.com": "wangyinghui@changba.com"
+    "kyleboy": "kyleboy@126.com"
   },
   "source": {
-    "git": "https://github.com/iyinghui@163.com/DataBind.git",
+    "git": "https://github.com/kyleboy/DataBind.git",
     "tag": "0.1.0"
   },
   "platforms": {
