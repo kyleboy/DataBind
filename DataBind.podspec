@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
   基于Swift propertyWrapper实现的KVO
                        DESC
 
-  s.homepage         = 'http://gitlab.changbaops.com/wangyinghui/DataBind'
+  s.homepage         = 'https://github.com/kyleboy/DataBind'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'iyinghui@163.com' => 'wangyinghui@changba.com' }
-  s.source           = { :git => 'git@gitlab.changbaops.com:wangyinghui/DataBind.git', :tag => s.version.to_s }
+  s.author           = { 'kyleboy' => 'kyleboy@126.com' }
+  s.source           = { :git => 'https://github.com/kyleboy/DataBind.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
