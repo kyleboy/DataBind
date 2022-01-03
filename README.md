@@ -15,18 +15,18 @@
 func test {
   class TestInt {
    	@Observable var i: Int = 0
- 	}
-	let x = TestInt()
-	x.$i.change(owner: self) { value in
-		print(t)
-	}
-	// print 0
-  
-	x.i = 1  // print 1
-	x.i += 1 // print 2
-	x.i += 1 // print 3
-	x.i += 1 // print 4
-	x.i -= 1 // print 3
+  }
+  let x = TestInt()
+  x.$i.change(owner: self) { value in
+	print(t)
+  }
+  // print 0
+
+  x.i = 1  // print 1
+  x.i += 1 // print 2
+  x.i += 1 // print 3
+  x.i += 1 // print 4
+  x.i -= 1 // print 3
 } 
 
 test() // 0 1 2 3 4 3
