@@ -21,6 +21,10 @@ class ViewController: UIViewController {
     var user: String?
     var viewModel = ViewModel()
     
+    deinit {
+        debugPrint("deinit ViewController")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -28,6 +32,9 @@ class ViewController: UIViewController {
         viewModel.$account.change(owner: self) { value in
             print("newValue: \(value.newValue ?? ""), oldValue: \(value.oldValue ?? "")")
         }
+        
+        viewModel.$account.bind(owner: password, keyPath: \UITextField.text)
+        viewModel.$account.bind(owner: self, keyPath: \.user)
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,12 +47,14 @@ class ViewController: UIViewController {
     }
     
     @IBAction func presentSelf(_ sender: Any) {
-        self.present(Self(), animated: true, completion: nil)
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyBoard.instantiateViewController(withIdentifier: "ViewController")
+        self.present(vc, animated: true, completion: nil)
     }
 }
 
 
 class ViewModel: NSObject {
     @Observable var account: String? = "12"
-    var password: String?
+    @Observable var password: String?
 }

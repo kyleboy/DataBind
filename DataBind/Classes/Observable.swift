@@ -130,6 +130,13 @@ extension Publisher {
     }
     
     @discardableResult
+    public func bind<T: AnyObject>(owner: T, flag: String = "default", keyPath: WritableKeyPath<T, ValueType>) -> Subscription<ValueChangeType> {
+        return change(owner: owner, flag: flag) { [weak owner] value in
+            owner?[keyPath: keyPath] = value.newValue
+        }
+    }
+    
+    @discardableResult
     public func remove(subscription: Subscription<ValueChangeType>) -> Self {
         event.remove(subscription: subscription)
         return self
