@@ -35,6 +35,7 @@ class ViewController: UIViewController {
         
         viewModel.$account.bind(owner: password, keyPath: \UITextField.text)
         viewModel.$account.bind(owner: self, keyPath: \.user)
+        viewModel.$account.bind(owner: confirmPassword, transform: { ($0 ?? "") + "3" }, keyPath: \.text)
     }
 
     override func didReceiveMemoryWarning() {

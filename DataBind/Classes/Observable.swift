@@ -113,6 +113,7 @@ public protocol Publisher {
     /// 添加一个监听
     /// - Parameters:
     ///   - owner: 监听者
+    ///   - flag: 此绑定标识
     ///   - handler: 数据变化回调
     @discardableResult
     func change(owner: AnyObject?, flag: String, handler: @escaping (ValueChangeType) -> ()) -> Subscription<ValueChangeType>
@@ -130,9 +131,23 @@ extension Publisher {
     }
     
     @discardableResult
-    public func bind<T: AnyObject>(owner: T, flag: String = "default", keyPath: WritableKeyPath<T, ValueType>) -> Subscription<ValueChangeType> {
+    /// 通过 keyPath 将属性值改变，绑定到指定 keyPath 的属性上面
+    /// - Parameters:
+    ///   - owner: 监听者
+    ///   - flag: 此绑定标识
+    ///   - transform: 同类型参数的值转换回调
+    ///   - keyPath: swift 的 keyPath
+    /// - Returns: 订阅实例
+    public func bind<T: AnyObject>(owner: T,
+                                   flag: String = "default",
+                                   transform: ((ValueType) -> ValueType)? = nil,
+                                   keyPath: WritableKeyPath<T, ValueType>) -> Subscription<ValueChangeType> {
         return change(owner: owner, flag: flag) { [weak owner] value in
-            owner?[keyPath: keyPath] = value.newValue
+            var newValue = value.newValue
+            if let transform = transform {
+                newValue = transform(newValue)
+            }
+            owner?[keyPath: keyPath] = newValue
         }
     }
     
@@ -200,5 +215,5 @@ public struct Subject<T>: Publisher {
 
 
 func log(_ msg: String) {
-    debugPrint("Observable \(msg)")
+//    debugPrint("Observable \(msg)")
 }

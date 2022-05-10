@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DataBind'
-  s.version          = '0.1.1'
+  s.version          = '0.2.1'
   s.summary          = '利用Swift 属性包装器和泛型实现的观察者模式（KVO）'
 
 # This description is used to generate tags and improve search results.
