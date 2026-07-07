@@ -52,7 +52,7 @@ pod 'DataBind'
 
 ## Author
 
-iyinghui@163.com, wangyinghui@changba.com
+kyleboy@126.com
 
 ## License
 
